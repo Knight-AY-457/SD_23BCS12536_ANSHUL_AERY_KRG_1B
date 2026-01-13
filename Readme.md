@@ -2,8 +2,8 @@
 
 ## Author
 **Name:** Anshul Aery  
-**UID:** <23BCS12536>  
-**University:** < Chandigarh University>
+**UID:** 23BCS12536  
+**University:**  Chandigarh University
 
 ---
 
@@ -25,4 +25,4 @@ The goal of this repository is to:
 - <HTML/CSS / Tailwind,React>
 - <Language / SpringBoot >
 - <Database / PostgresSQL>
-- <Other  Hibernate >
+- <Other  / Hibernate >
