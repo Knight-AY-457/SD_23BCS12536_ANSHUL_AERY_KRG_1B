@@ -1,0 +1,44 @@
+## ELASTICSEARCH SOLUTION FOR SEARCH & INDEXING OPTIMIZATION
+
+### Problem Statement:
+- **Search Functionality Issue**: Degraded performance when searching large datasets (especially when target data is at the end of table)
+- **Indexing Complexity**: O(n) time complexity in traditional database indexing is inefficient for high-volume searches
+
+### Solution: Elasticsearch Architecture
+
+#### Core Components:
+
+1. **Tokenization & Keyword Analysis**
+   - Break down search queries and documents into individual tokens/keywords
+   - Group related keywords into logical components
+   - Enable semantic understanding of search intent
+
+2. **Inverted Indexing**
+   - Map keywords → documents containing those keywords (reverse mapping)
+   - Use document intersection logic for multi-keyword searches
+   - Dramatically reduces search time from O(n) to O(1) or O(log n)
+
+3. **Search Decoupling**
+   - Move search operations from primary database to dedicated Elasticsearch engine
+   - Reduces load on transactional database
+   - Allows independent optimization and scaling of search functionality
+
+#### Key Features:
+
+- **Full-Text Search Engine**: Purpose-built for fast, relevant search queries
+- **Multi-Keyword Search**: Efficiently handles complex queries with multiple search terms
+- **Built on Apache Lucene**: Leverages proven, enterprise-grade indexing library
+
+### Data Synchronization Strategy: CDC (Change Data Capture) Pipeline
+
+#### Problem:
+How to keep Elasticsearch index synchronized with source database when data changes?
+- Example: Product price changes from $40 to $50 in database
+
+#### Solution:
+- **Watcher Pattern**: Implement a buffer/listener mechanism to monitor real-time database changes
+- **CDC Pipeline**: Capture database mutations and propagate them to Elasticsearch
+- **Eventual Consistency**: Ensures search index reflects current database state
+
+#### Implementation Flow:
+Database Change → CDC Detector → Elasticsearch Update → Index Synchronized
