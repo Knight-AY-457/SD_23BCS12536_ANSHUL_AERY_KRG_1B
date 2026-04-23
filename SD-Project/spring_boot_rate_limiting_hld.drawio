@@ -1,0 +1,183 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1">
+  <diagram id="spring-boot-rate-limiting" name="Spring Boot Rate Limiting HLD">
+    <mxGraphModel dx="1148" dy="753" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="client" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;Client (React App)&lt;/b&gt;&lt;br&gt;Sends requests with&lt;br&gt;X-API-KEY header&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="240" x="480" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;API Gateway&lt;/b&gt;&lt;br&gt;(Optional - for scalability)&lt;br&gt;Load Balancing / Routing&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="240" x="480" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" edge="1" parent="1" source="client" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;" target="gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1-label" connectable="0" parent="arrow1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" value="HTTP Request" vertex="1">
+          <mxGeometry relative="1" x="-0.2" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="backend-container" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=14;verticalAlign=top;fontStyle=1;dashed=1;dashPattern=8 8;" value="&lt;b&gt;Spring Boot Backend&lt;/b&gt;" vertex="1">
+          <mxGeometry height="600" width="880" x="160" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="interceptor" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;align=left;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;RateLimitInterceptor&lt;/b&gt;&lt;br&gt;(HandlerInterceptor)&lt;br&gt;&lt;br&gt;1. Extract X-API-KEY&lt;br&gt;2. Validate API Key&lt;br&gt;3. Check Rate Limit&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="240" x="480" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" edge="1" parent="1" source="gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" target="interceptor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rate-limiter-service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;align=left;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;RateLimiterService&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Get/Create Bucket for API Key&lt;br&gt;- Determine Plan (FREE/PREMIUM)&lt;br&gt;- Configure Bucket Capacity&lt;br&gt;- Try Consume Token&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="260" x="200" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="bucket4j" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=left;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;Bucket4j&lt;/b&gt;&lt;br&gt;(Token Bucket Algorithm)&lt;br&gt;&lt;br&gt;In-Memory Bucket Storage&lt;br&gt;ConcurrentHashMap&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="260" x="200" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" edge="1" parent="1" source="interceptor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" target="rate-limiter-service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3-label" connectable="0" parent="arrow3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" value="Check Rate Limit" vertex="1">
+          <mxGeometry relative="1" x="-0.2" y="2" as="geometry">
+            <mxPoint x="10" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow4" edge="1" parent="1" source="rate-limiter-service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" target="bucket4j">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4-label" connectable="0" parent="arrow4" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" value="tryConsume(1)" vertex="1">
+          <mxGeometry relative="1" x="-0.2" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="controllers" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=left;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;Controllers Layer&lt;/b&gt;&lt;br&gt;&lt;br&gt;- MovieController&lt;br&gt;- BookingController&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="200" x="540" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" edge="1" parent="1" source="interceptor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#00CC00;" target="controllers">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5-label" connectable="0" parent="arrow5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#006600;" value="✓ Rate Limit OK" vertex="1">
+          <mxGeometry relative="1" x="-0.2" y="2" as="geometry">
+            <mxPoint x="20" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="services" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;align=left;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;Service Layer&lt;/b&gt;&lt;br&gt;&lt;br&gt;- MovieService&lt;br&gt;- BookingService&lt;br&gt;- Business Logic&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="200" x="540" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow6" edge="1" parent="1" source="controllers" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" target="services">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="database" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;Database&lt;/b&gt;&lt;br&gt;(In Memory)&lt;br&gt;&lt;br&gt;Movies, Bookings,&lt;br&gt;Users, etc.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="570" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow7" edge="1" parent="1" source="services" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" target="database">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rate-limit-exceeded" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;HTTP 429&lt;/b&gt;&lt;br&gt;Rate Limit Exceeded&lt;br&gt;&lt;br&gt;Global Exception Handler&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="180" x="800" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow8" edge="1" parent="1" source="interceptor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#CC0000;dashed=1;" target="rate-limit-exceeded">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow8-label" connectable="0" parent="arrow8" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#CC0000;" value="✗ Limit Exceeded" vertex="1">
+          <mxGeometry relative="1" x="-0.2" y="2" as="geometry">
+            <mxPoint x="-10" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="invalid-api-key" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;HTTP 401&lt;/b&gt;&lt;br&gt;Invalid API Key&lt;br&gt;&lt;br&gt;Global Exception Handler&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="180" x="800" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow9" edge="1" parent="1" source="interceptor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#CC0000;dashed=1;" target="invalid-api-key">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="760" y="450" />
+              <mxPoint x="760" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow9-label" connectable="0" parent="arrow9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#CC0000;" value="✗ Invalid Key" vertex="1">
+          <mxGeometry relative="1" x="-0.2" y="2" as="geometry">
+            <mxPoint x="5" y="-28" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="future-enhancements" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;verticalAlign=top;fontStyle=1;dashed=1;dashPattern=8 8;" value="&lt;b&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Future Enhancements&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="200" width="1120" x="40" y="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="redis" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;Redis&lt;/b&gt;&lt;br&gt;(Distributed Rate Limiting)&lt;br&gt;&lt;br&gt;Replace In-Memory Storage&lt;br&gt;Share buckets across instances&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="200" x="80" y="1060" as="geometry" />
+        </mxCell>
+        <mxCell id="backend-instance-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;Spring Boot&lt;/b&gt;&lt;br&gt;Instance 1&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="360" y="1060" as="geometry" />
+        </mxCell>
+        <mxCell id="backend-instance-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;Spring Boot&lt;/b&gt;&lt;br&gt;Instance 2&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="530" y="1060" as="geometry" />
+        </mxCell>
+        <mxCell id="backend-instance-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;Spring Boot&lt;/b&gt;&lt;br&gt;Instance N&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="700" y="1060" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow10" edge="1" parent="1" source="redis" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;dashed=1;strokeColor=#000000;" target="backend-instance-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow11" edge="1" parent="1" source="redis" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;dashed=1;strokeColor=#000000;" target="backend-instance-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="1140" />
+              <mxPoint x="530" y="1140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow12" edge="1" parent="1" source="redis" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;dashed=1;strokeColor=#000000;" target="backend-instance-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="770" y="1150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load-balancer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;Load Balancer&lt;/b&gt;&lt;br&gt;(Nginx/HAProxy)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="160" x="900" y="1075" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;verticalAlign=top;fontStyle=1;align=left;fillColor=#f5f5f5;gradientColor=#b3b3b3;strokeColor=#666666;" value="&lt;b&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Legend&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="180" width="280" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-success" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#00CC00;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="60" y="80" as="sourcePoint" />
+            <mxPoint x="120" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-success-label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Success Path&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="100" x="130" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-error" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#CC0000;dashed=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="60" y="110" as="sourcePoint" />
+            <mxPoint x="120" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-error-label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Error Path&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="100" x="130" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-flow" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#000000;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="60" y="140" as="sourcePoint" />
+            <mxPoint x="120" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-flow-label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Request Flow&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="100" x="130" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-future" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#000000;dashed=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="60" y="170" as="sourcePoint" />
+            <mxPoint x="120" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-future-label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Future Enhancement&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="140" x="130" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="api-plans" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;align=left;verticalAlign=top;" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;API Key Plans&lt;/b&gt;&lt;br&gt;&lt;br&gt;FREE: 10 req/min&lt;br&gt;PREMIUM: 100 req/min&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="160" x="200" y="380" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
